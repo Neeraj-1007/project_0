@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+
+<bean id="dataSourceC3P0" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+        >
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/ORSProject0" />
+        <property name="user" value="root" />
+        <property name="password" value="root" />
+        <property name="acquireIncrement" value="10" />
+        <property name="minPoolSize" value="10" />
+        <property name="maxPoolSize" value="100" />
+        <property name="maxIdleTime" value="10" />
+        
+        
+    </bean>
+
+         
+
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource">
+            <ref bean="dataSourceC3P0" />
+        </property>
+
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">
+                   org.hibernate.dialect.MySQL5InnoDBDialect
+                </prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+
+        <property name="annotatedClasses">
+            <list>
+                <value>com.rays.orsproject0.dto.RoleDTO</value>
+                <value>com.rays.orsproject0.dto.UserDTO</value>
+                <value>com.rays.orsproject0.dto.CollegeDTO</value>
+                <value>com.rays.orsproject0.dto.CourseDTO</value>
+                <value>com.rays.orsproject0.dto.FacultyDTO</value>
+                <value>com.rays.orsproject0.dto.StudentDTO</value>
+                <value>com.rays.orsproject0.dto.SubjectDTO</value>
+                <value>com.rays.orsproject0.dto.TimetableDTO</value>
+                <value>com.rays.orsproject0.dto.MarksheetDTO</value>
+               
+            </list>
+        </property>
+
+    </bean>
+
+    <bean id="hibernateTransactionManager"
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <!-- enables annotation based transaction -->
+
+    <tx:annotation-driven transaction-manager="hibernateTransactionManager" />
+    
+</beans>
